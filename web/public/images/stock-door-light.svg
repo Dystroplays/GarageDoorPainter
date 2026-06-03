@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <!-- Sky -->
+  <rect width="800" height="600" fill="#87CEEB"/>
+  <!-- Ground -->
+  <rect y="450" width="800" height="150" fill="#8B7355"/>
+  <!-- House wall -->
+  <rect x="100" y="100" width="600" height="400" fill="#D4C9B8"/>
+  <!-- Driveway -->
+  <rect x="200" y="420" width="400" height="180" fill="#A0978A"/>
+  <!-- Garage door frame -->
+  <rect x="220" y="200" width="360" height="260" fill="#C8BCA8" stroke="#A09080" stroke-width="4"/>
+  <!-- Light door panels (4x2 grid) -->
+  <rect x="230" y="210" width="160" height="120" rx="3" fill="#E8DDD0" stroke="#B0A090" stroke-width="2"/>
+  <rect x="410" y="210" width="160" height="120" rx="3" fill="#E8DDD0" stroke="#B0A090" stroke-width="2"/>
+  <rect x="230" y="340" width="160" height="110" rx="3" fill="#E8DDD0" stroke="#B0A090" stroke-width="2"/>
+  <rect x="410" y="340" width="160" height="110" rx="3" fill="#E8DDD0" stroke="#B0A090" stroke-width="2"/>
+  <!-- Door handle -->
+  <circle cx="398" cy="465" r="8" fill="#808080"/>
+  <!-- Window above door -->
+  <rect x="310" y="120" width="180" height="60" fill="#87CEEB" stroke="#A09080" stroke-width="3"/>
+  <!-- "PLACEHOLDER" label -->
+  <text x="400" y="560" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#666">Light door — replace with real photo</text>
+</svg>
