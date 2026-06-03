@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 interface PainterInfo {
@@ -113,7 +113,7 @@ async function uploadPhoto(file: File, token: string): Promise<string> {
   return data.url as string;
 }
 
-export default function PainterPage() {
+function PainterPageInner() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token") ?? "";
 
@@ -524,6 +524,14 @@ export default function PainterPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function PainterPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><div className="text-gray-500 text-lg">Loading…</div></div>}>
+      <PainterPageInner />
+    </Suspense>
   );
 }
 
