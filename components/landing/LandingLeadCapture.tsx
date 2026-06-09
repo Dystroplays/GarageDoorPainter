@@ -7,8 +7,8 @@ import { pixelLead } from "@/lib/pixel";
 export default function LandingLeadCapture() {
   const router = useRouter();
   const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -42,9 +42,8 @@ export default function LandingLeadCapture() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: firstName.trim(),
+          name: `${firstName.trim()} ${lastName.trim()}`.trim(),
           email: email.trim(),
-          phone: phone.trim() || undefined,
           source,
         }),
       });
@@ -57,9 +56,8 @@ export default function LandingLeadCapture() {
       localStorage.setItem(
         "bolt_lead",
         JSON.stringify({
-          name: firstName.trim(),
+          name: `${firstName.trim()} ${lastName.trim()}`.trim(),
           email: email.trim(),
-          phone: phone.trim() || "",
           contactId: data.contactId,
         })
       );
@@ -104,6 +102,8 @@ export default function LandingLeadCapture() {
                   <label className="block text-white text-sm font-medium mb-2">Last Name</label>
                   <input
                     type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
                     placeholder="Johnson"
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-bolt-yellow transition-colors"
                     autoComplete="family-name"
@@ -120,20 +120,6 @@ export default function LandingLeadCapture() {
                   placeholder="sarah@example.com"
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-bolt-yellow transition-colors"
                   autoComplete="email"
-                />
-              </div>
-
-              <div>
-                <label className="block text-white text-sm font-medium mb-2">
-                  Phone Number <span className="text-gray-500 font-normal">(optional)</span>
-                </label>
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="(817) 555-0100"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-bolt-yellow transition-colors"
-                  autoComplete="tel"
                 />
               </div>
 

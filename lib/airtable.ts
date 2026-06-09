@@ -96,6 +96,29 @@ export async function updateContact(
   });
 }
 
+export async function getContactVisualizationCount(contactId: string): Promise<number> {
+  try {
+    const result = await airtableFetch(
+      `${baseUrl(CONTACTS)}/${contactId}?fields%5B%5D=AI%20Previews%20Used`
+    );
+    return (result.fields?.["AI Previews Used"] as number) ?? 0;
+  } catch {
+    return 0;
+  }
+}
+
+export async function incrementContactVisualizationCount(contactId: string): Promise<void> {
+  try {
+    const current = await getContactVisualizationCount(contactId);
+    await airtableFetch(`${baseUrl(CONTACTS)}/${contactId}`, {
+      method: "PATCH",
+      body: JSON.stringify({ fields: { "AI Previews Used": current + 1 } }),
+    });
+  } catch {
+    console.warn("Could not increment AI Previews Used for contact", contactId);
+  }
+}
+
 // --- Bookings ---
 
 export async function createBooking(

@@ -157,9 +157,7 @@ export default function FunnelWrapper() {
           {step === "configure" && (
             <Configurator
               doors={doors}
-              onChange={setDoors}
               onComplete={handleConfigureComplete}
-              isCreatingQuote={creatingBooking}
             />
           )}
 

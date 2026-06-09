@@ -1,7 +1,10 @@
 import Replicate from "replicate";
 import { z } from "zod";
+import { getContactVisualizationCount, incrementContactVisualizationCount } from "@/lib/airtable";
 
 export const dynamic = "force-dynamic";
+
+const MAX_GENERATIONS = 3;
 
 // Model: set REPLICATE_MODEL in .env.local to a Stable Diffusion inpainting model.
 // Format: owner/model:VERSION_HASH (colon separator, not /versions/)
@@ -20,6 +23,7 @@ const bodySchema = z.object({
   maskBase64: z.string().min(100),
   targetColorHex: z.string().regex(/^#[0-9A-Fa-f]{6}$/),
   targetColorLrv: z.number().min(0).max(100).optional(),
+  contactId: z.string().optional(),
 });
 
 export async function POST(request: Request) {
@@ -30,7 +34,14 @@ export async function POST(request: Request) {
       return Response.json({ error: "Invalid request body" }, { status: 400 });
     }
 
-    const { imageBase64, maskBase64, targetColorHex, targetColorLrv } = parsed.data;
+    const { imageBase64, maskBase64, targetColorHex, targetColorLrv, contactId } = parsed.data;
+
+    if (contactId) {
+      const used = await getContactVisualizationCount(contactId);
+      if (used >= MAX_GENERATIONS) {
+        return Response.json({ error: "limit_reached", used }, { status: 429 });
+      }
+    }
 
     if (!process.env.REPLICATE_API_TOKEN) {
       return Response.json({ error: "REPLICATE_API_TOKEN not set in .env.local" }, { status: 500 });
@@ -94,6 +105,10 @@ export async function POST(request: Request) {
     if (!imageUrl || imageUrl === "[object Object]") {
       console.error("Unexpected output format:", JSON.stringify(output));
       return Response.json({ error: "Model output was not a URL. Check server logs." }, { status: 500 });
+    }
+
+    if (contactId) {
+      await incrementContactVisualizationCount(contactId);
     }
 
     return Response.json({ imageUrl });

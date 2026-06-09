@@ -80,6 +80,22 @@ export async function refundSquareDeposit(
   });
 }
 
+export async function chargePreviewCredits(
+  sourceId: string,
+  amountCents: number
+): Promise<string> {
+  const client = getSquare();
+  const paymentRes = await client.payments.create({
+    idempotencyKey: crypto.randomUUID(),
+    sourceId,
+    amountMoney: { amount: BigInt(amountCents), currency: "USD" },
+    note: "Garage door color preview credits — Bolt Painting",
+  });
+  const paymentId = paymentRes.payment?.id;
+  if (!paymentId) throw new Error("Payment failed");
+  return paymentId;
+}
+
 export async function chargeSquareBalanceOnFile(
   cardId: string,
   balanceAmountDollars: number,

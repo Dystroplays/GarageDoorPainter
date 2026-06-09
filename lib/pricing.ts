@@ -1,22 +1,19 @@
 import type { DoorConfig, DoorSize, LineItem, PriceBreakdown } from "@/types";
 
-const SINGLE_PRICE = 799;
-const DOUBLE_PRICE = 899;
+const SINGLE_PRICE = 599;
+const DOUBLE_PRICE = 799;
 const PRIMER_UPCHARGE = 99;
-
-// PRD §4.2: exact 2-door bundle prices
 const TWO_DOOR_BUNDLES: Record<string, number> = {
-  "single-single": 1395,
-  "single-double": 1495,
-  "double-single": 1495,
-  "double-double": 1595,
+  "single-single": 1095,
+  "single-double": 1295,
+  "double-single": 1295,
+  "double-double": 1495,
 };
 
-// PRD §4.2: per-door discount for 3-5 doors
 const VOLUME_DISCOUNTS: Record<number, number> = {
-  3: 100,
-  4: 125,
-  5: 150,
+  3: 90,
+  4: 110,
+  5: 130,
 };
 
 export function basePrice(size: DoorSize): number {

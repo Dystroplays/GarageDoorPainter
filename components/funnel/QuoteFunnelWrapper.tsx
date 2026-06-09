@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import type { DoorConfig, DoorSize, PriceBreakdown, SWColor } from "@/types";
+import type { DoorConfig, PriceBreakdown } from "@/types";
 import { calculatePrice, needsPrimer } from "@/lib/pricing";
 import QuoteHeader from "./QuoteHeader";
 import ProgressBar from "./ProgressBar";
@@ -55,8 +55,6 @@ export default function QuoteFunnelWrapper() {
   const [doors, setDoors] = useState<DoorConfig[]>([]);
   const [booking, setBooking] = useState<BookingInfo | null>(null);
   const [creatingBooking, setCreatingBooking] = useState(false);
-  const [initialDoorType, setInitialDoorType] = useState<DoorSize | null>(null);
-  const [initialColor, setInitialColor] = useState<SWColor | null>(null);
 
   const pricing: PriceBreakdown = calculatePrice(doors);
   const phone = process.env.NEXT_PUBLIC_CONTACT_PHONE ?? "";
@@ -124,6 +122,27 @@ export default function QuoteFunnelWrapper() {
     setStep("confirmed");
   }
 
+  function handleBack() {
+    switch (step) {
+      case "vsl":
+        router.push("/");
+        break;
+      case "visualize":
+        setStep("vsl");
+        break;
+      case "configure":
+        setStep("visualize");
+        break;
+      case "schedule":
+        setStep("configure");
+        break;
+      case "checkout":
+        setBooking(null);
+        setStep("schedule");
+        break;
+    }
+  }
+
   if (!lead) {
     return (
       <div className="min-h-screen bg-bolt-black flex items-center justify-center">
@@ -141,6 +160,22 @@ export default function QuoteFunnelWrapper() {
     <div className="min-h-screen bg-white" ref={topRef}>
       <QuoteHeader />
 
+      {!showConfirmation && (
+        <div className="bg-white border-b border-gray-100">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+            <button
+              onClick={handleBack}
+              className="text-sm text-gray-400 hover:text-gray-700 transition-colors flex items-center gap-1"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              {step === "vsl" ? "Back to home" : "Back"}
+            </button>
+          </div>
+        </div>
+      )}
+
       {!showConfirmation && <ProgressBar step={stepToNumber(step)} total={6} />}
 
       {/* Step 2: VSL */}
@@ -151,9 +186,9 @@ export default function QuoteFunnelWrapper() {
       {/* Step 3: AI Visualizer */}
       {step === "visualize" && (
         <VisualizeStep
-          onComplete={(doorType, color) => {
-            setInitialDoorType(doorType);
-            setInitialColor(color);
+          contactId={lead.contactId}
+          onComplete={(doors) => {
+            setDoors(doors);
             setStep("configure");
           }}
         />
@@ -174,10 +209,8 @@ export default function QuoteFunnelWrapper() {
       {step === "configure" && (
         <Configurator
           doors={doors}
-          onChange={setDoors}
           onComplete={() => setStep("schedule")}
-          initialDoorType={initialDoorType ?? undefined}
-          initialColor={initialColor}
+          newDoorUrl={process.env.NEXT_PUBLIC_NEW_DOOR_URL ?? ""}
         />
       )}
 

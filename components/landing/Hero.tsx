@@ -1,7 +1,7 @@
 import HeroColorShowcase from "./HeroColorShowcase";
 
 const STATS = [
-  { value: "$799", label: "Starting price" },
+  { value: "$599", label: "Starting price" },
   { value: "100%", label: "Home value ROI" },
   { value: "211", label: "Sherwin-Williams colors" },
   { value: "<10 min", label: "Online booking time" },
@@ -53,7 +53,7 @@ export default function Hero() {
               Studies show garage door improvements can return up to{" "}
               <strong className="text-white">100% on your investment</strong>. Pick your
               Sherwin-Williams color, preview it on your home, and book online —
-              starting at <strong className="text-white">$799 per door</strong>.
+              starting at <strong className="text-white">$599 per door</strong>.
             </p>
 
             <div className="flex flex-col gap-3 mb-8">
@@ -98,7 +98,7 @@ export default function Hero() {
               <HeroColorShowcase />
             </div>
             <div className="absolute -top-4 -right-4 bg-bolt-yellow rounded-xl p-3 shadow-xl">
-              <div className="font-display text-3xl text-black uppercase">$799</div>
+              <div className="font-display text-3xl text-black uppercase">$599</div>
               <div className="text-xs text-black/70">Starting price</div>
             </div>
           </div>
